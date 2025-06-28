@@ -1,1 +1,0 @@
-uv not pip!!!

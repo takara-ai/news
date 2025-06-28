@@ -9,6 +9,46 @@ interface NewsArticleProps {
 }
 
 export function NewsArticle({ article }: NewsArticleProps) {
+  const renderMarkdownLinks = (text: string) => {
+    // Regex to match markdown links [text](url)
+    const markdownLinkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+
+    const parts = [];
+    let lastIndex = 0;
+    let match;
+
+    while ((match = markdownLinkRegex.exec(text)) !== null) {
+      // Add text before the link
+      if (match.index > lastIndex) {
+        parts.push(text.slice(lastIndex, match.index));
+      }
+
+      // Add the link
+      const linkText = match[1];
+      const linkUrl = match[2];
+      parts.push(
+        <a
+          key={match.index}
+          href={linkUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
+        >
+          {linkText}
+        </a>
+      );
+
+      lastIndex = match.index + match[0].length;
+    }
+
+    // Add remaining text after the last link
+    if (lastIndex < text.length) {
+      parts.push(text.slice(lastIndex));
+    }
+
+    return parts.length > 0 ? parts : text;
+  };
+
   const renderContent = (content: string) => {
     const paragraphs = content.split("\n\n");
     return paragraphs.map((paragraph, index) => (
@@ -16,7 +56,7 @@ export function NewsArticle({ article }: NewsArticleProps) {
         key={index}
         className="article-content mb-6 text-newspaper-black dark:text-white first:first-letter:float-left first:first-letter:text-6xl first:first-letter:font-bold first:first-letter:mr-2 first:first-letter:mt-1 first:first-letter:leading-none"
       >
-        {paragraph}
+        {renderMarkdownLinks(paragraph)}
       </p>
     ));
   };

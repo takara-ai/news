@@ -13,6 +13,7 @@ const config: Config = {
         serif: ["var(--font-crimson)", "Georgia", "Times New Roman", "serif"],
         display: ["var(--font-playfair)", "Georgia", "serif"],
         sans: ["var(--font-inter)", "Arial", "sans-serif"],
+        chomsky: ["var(--font-chomsky)", "serif"],
       },
       fontSize: {
         headline: ["3rem", { lineHeight: "1.1", letterSpacing: "-0.02em" }],

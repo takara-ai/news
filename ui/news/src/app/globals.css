@@ -1,9 +1,20 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Chomsky";
+  src: url("/fonts/Chomsky.woff2") format("woff2"),
+    url("/fonts/Chomsky.woff") format("woff"),
+    url("/fonts/Chomsky.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme inline {
   --font-serif: var(--font-crimson);
   --font-display: var(--font-playfair);
   --font-sans: var(--font-inter);
+  --font-chomsky: "Chomsky", serif;
 }
 
 body {
@@ -13,9 +24,14 @@ body {
 
 /* Newspaper masthead styling */
 .masthead {
-  font-family: var(--font-display), Georgia, serif;
+  font-family: var(--font-chomsky), var(--font-display), Georgia, serif;
   font-weight: 700;
   letter-spacing: -0.02em;
+}
+
+/* Force Chomsky font for header masthead */
+header .masthead {
+  font-family: "Chomsky", serif !important;
 }
 
 /* Article content styling */
@@ -132,4 +148,9 @@ button {
   .masthead {
     font-size: 36pt;
   }
+}
+
+/* Chomsky font class */
+.font-chomsky {
+  font-family: "Chomsky", serif !important;
 }

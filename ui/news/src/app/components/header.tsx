@@ -37,7 +37,7 @@ export function Header({
         {/* Masthead */}
         <div className="text-center py-8">
           <Link href="/" className="block">
-            <h1 className="masthead text-5xl md:text-7xl text-newspaper-black dark:text-white hover:text-newspaper-gray-700 dark:hover:text-newspaper-gray-300 transition-colors cursor-pointer">
+            <h1 className="masthead font-chomsky text-5xl md:text-7xl text-newspaper-black dark:text-white hover:text-newspaper-gray-700 dark:hover:text-newspaper-gray-300 transition-colors cursor-pointer">
               The New World Times
             </h1>
           </Link>

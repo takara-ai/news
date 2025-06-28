@@ -2,7 +2,7 @@ from .Tool import Tool
 import reader
 from datetime import datetime
 
-def get_rss_feeds() -> list[dict]:
+def get_rss_feeds(none: str = "") -> list[dict]:
     return [
         # Sports
         {"feed_name": "r/sports", "feed_url": "https://www.reddit.com/r/sports.rss", "category": "sports"},
@@ -35,13 +35,13 @@ def get_rss_feeds() -> list[dict]:
         {"feed_name": "r/Asia", "feed_url": "https://www.reddit.com/r/Asia.rss", "category": "world"},
         {"feed_name": "r/internationalnews", "feed_url": "https://www.reddit.com/r/internationalnews.rss", "category": "world"}
     ]
-get_rss_feeds = Tool({
+get_rss_feeds = Tool(
     "get_rss_feeds",
     "return a list of some available RSS feeds",
-    None,
+    {"none": str},
     list[dict],
     get_rss_feeds
-})
+)
 
 # Get RSS feed content
 def get_rss_content(rss_url: str) -> list[dict[str, str]]:
@@ -79,5 +79,5 @@ read_rss_tool = Tool(
     "Read an RSS feed and return a list of articles with title, date, and URL.",
     {"rss_url": str},
     list[dict[str, str]],
-    get_rss_contents
+    get_rss_content
 )

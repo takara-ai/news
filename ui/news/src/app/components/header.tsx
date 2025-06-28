@@ -3,18 +3,22 @@
 import Link from "next/link";
 import { ThemeToggle } from "./theme-toggle";
 import { getCurrentDate } from "../utils/date-utils";
+import { TopicNavigation } from "./topic-navigation";
+import { TOPIC_CONFIG } from "../config/topics";
 
 interface HeaderProps {
   showNewArticleButton?: boolean;
   onNewArticle?: () => void;
+  onTopicSelect?: (prompt: string) => void;
 }
 
 export function Header({
   showNewArticleButton = false,
   onNewArticle,
+  onTopicSelect,
 }: HeaderProps) {
   return (
-    <header className="border-b-2 border-newspaper-black dark:border-newspaper-gray-700">
+    <header>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Top bar */}
         <div className="flex justify-between items-center py-3 text-sm border-b border-newspaper-gray-200 dark:border-newspaper-gray-700">
@@ -45,7 +49,18 @@ export function Header({
             News for you, about anything you want
           </div>
         </div>
+
+        {/* Topic Navigation */}
+        <div className="mb-2">
+          <TopicNavigation
+            topics={TOPIC_CONFIG}
+            onTopicSelect={onTopicSelect || (() => {})}
+            className="mb-0"
+          />
+        </div>
       </div>
+      {/* Bottom border */}
+      <div className="border-b-2 border-newspaper-black dark:border-newspaper-gray-700" />
     </header>
   );
 }

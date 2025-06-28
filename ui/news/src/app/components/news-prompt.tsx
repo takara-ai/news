@@ -1,16 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Send, Loader2 } from "lucide-react";
 import { Article } from "../types/article";
 
 interface NewsPromptProps {
   onArticleGenerated: (article: Article) => void;
+  initialPrompt?: string;
 }
 
-export function NewsPrompt({ onArticleGenerated }: NewsPromptProps) {
-  const [prompt, setPrompt] = useState("");
+export function NewsPrompt({
+  onArticleGenerated,
+  initialPrompt = "",
+}: NewsPromptProps) {
+  const [prompt, setPrompt] = useState(initialPrompt);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Update prompt when initialPrompt changes
+  useEffect(() => {
+    if (initialPrompt) {
+      setPrompt(initialPrompt);
+    }
+  }, [initialPrompt]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

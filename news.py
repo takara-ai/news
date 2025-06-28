@@ -20,7 +20,7 @@ if __name__ == "__main__":
     research = curate_content(question)
     print(research)
     agent = CodeAgent("google", "editorial_writer-2", loop_limit=10, tools=[web_search_tool, parse_webpage_tool], model="gemini-2.5-pro")
-    print(f"System Prompt: {code_agent.system_prompt}")
+    print(f"System Prompt: {agent.system_prompt}")
     agent(research, debug=True, eval_check=True)
     print(f"\n\nANSWER: {article}\n\n")
     #article = create_article(question, "gemini")

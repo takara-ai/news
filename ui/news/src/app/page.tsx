@@ -9,15 +9,23 @@ import { storeArticle } from "./utils/article-utils";
 
 export default function Home() {
   const router = useRouter();
+  const [currentPrompt, setCurrentPrompt] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleArticleGenerated = (article: Article) => {
     const slug = storeArticle(article);
     router.push(`/n/${slug}`);
   };
 
-  const handleTopicSelect = async (prompt: string) => {
+  const handleTopicSelect = (prompt: string) => {
     if (!prompt.trim()) return;
-    // Call the same API as NewsPrompt
+    setCurrentPrompt(prompt);
+    handlePromptSubmit(prompt);
+  };
+
+  const handlePromptSubmit = async (prompt: string) => {
+    if (!prompt.trim()) return;
+    setIsLoading(true);
     try {
       const response = await fetch("/api/generate-news", {
         method: "POST",
@@ -29,15 +37,21 @@ export default function Home() {
       const slug = storeArticle(article);
       router.push(`/n/${slug}`);
     } catch (error) {
-      // Optionally handle error
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <PageLayout onTopicSelect={handleTopicSelect}>
       <div className="max-w-4xl mx-auto">
-        <NewsPrompt onArticleGenerated={handleArticleGenerated} />
+        <NewsPrompt
+          onArticleGenerated={handleArticleGenerated}
+          initialPrompt={currentPrompt}
+          isLoading={isLoading}
+          onSubmit={handlePromptSubmit}
+        />
       </div>
     </PageLayout>
   );

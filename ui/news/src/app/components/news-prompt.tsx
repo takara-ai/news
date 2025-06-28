@@ -1,20 +1,27 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Send, Loader2 } from "lucide-react";
+import { Newspaper, Loader2 } from "lucide-react";
 import { Article } from "../types/article";
 
 interface NewsPromptProps {
   onArticleGenerated: (article: Article) => void;
   initialPrompt?: string;
+  isLoading?: boolean;
+  onSubmit?: (prompt: string) => Promise<void>;
 }
 
 export function NewsPrompt({
   onArticleGenerated,
   initialPrompt = "",
+  isLoading: externalIsLoading = false,
+  onSubmit,
 }: NewsPromptProps) {
   const [prompt, setPrompt] = useState(initialPrompt);
-  const [isLoading, setIsLoading] = useState(false);
+  const [internalIsLoading, setInternalIsLoading] = useState(false);
+
+  // Use external loading state if provided, otherwise use internal
+  const isLoading = onSubmit ? externalIsLoading : internalIsLoading;
 
   // Update prompt when initialPrompt changes
   useEffect(() => {
@@ -27,33 +34,39 @@ export function NewsPrompt({
     e.preventDefault();
     if (!prompt.trim() || isLoading) return;
 
-    setIsLoading(true);
-    try {
-      const response = await fetch("/api/generate-news", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ prompt: prompt.trim() }),
-      });
+    if (onSubmit) {
+      // Use external submit handler
+      await onSubmit(prompt.trim());
+    } else {
+      // Use internal submit handler (original behavior)
+      setInternalIsLoading(true);
+      try {
+        const response = await fetch("/api/generate-news", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ prompt: prompt.trim() }),
+        });
 
-      if (!response.ok) {
-        throw new Error("Failed to generate article");
+        if (!response.ok) {
+          throw new Error("Failed to generate article");
+        }
+
+        const article = await response.json();
+        onArticleGenerated(article);
+        setPrompt("");
+      } catch (error) {
+        console.error("Error generating article:", error);
+        // Handle error appropriately
+      } finally {
+        setInternalIsLoading(false);
       }
-
-      const article = await response.json();
-      onArticleGenerated(article);
-      setPrompt("");
-    } catch (error) {
-      console.error("Error generating article:", error);
-      // Handle error appropriately
-    } finally {
-      setIsLoading(false);
     }
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto text-center">
+    <div className="w-full max-w-2xl mx-auto text-center pt-32">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="relative">
           <input
@@ -61,7 +74,7 @@ export function NewsPrompt({
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             placeholder="What story would you like to read today?"
-            className="w-full p-4 pr-16 border-2 border-newspaper-gray-300 dark:border-newspaper-gray-600 rounded-lg focus:ring-2 focus:ring-newspaper-black dark:focus:ring-white focus:border-transparent dark:bg-newspaper-gray-800 text-newspaper-black dark:text-white placeholder-newspaper-gray-500 dark:placeholder-newspaper-gray-400 font-sans text-lg"
+            className="w-full p-4 pr-16 text-center border-newspaper-gray-300 dark:border-newspaper-gray-600 rounded-lg focus:ring-0    dark:bg-newspaper-gray-800 text-newspaper-black dark:text-white placeholder-newspaper-gray-500 dark:placeholder-newspaper-gray-400 font-sans text-lg"
             disabled={isLoading}
           />
           <button
@@ -72,7 +85,7 @@ export function NewsPrompt({
             {isLoading ? (
               <Loader2 className="h-5 w-5 animate-spin" />
             ) : (
-              <Send className="h-5 w-5" />
+              <Newspaper className="h-5 w-5" />
             )}
           </button>
         </div>

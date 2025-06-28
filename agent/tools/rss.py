@@ -2,7 +2,6 @@ from .Tool import Tool
 import reader
 from datetime import datetime
 
-rss_feeds = 
 def get_rss_feeds() -> list[dict]:
     return [
         # Sports

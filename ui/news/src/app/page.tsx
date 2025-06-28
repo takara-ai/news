@@ -1,43 +1,41 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { NewsPrompt } from "./components/news-prompt";
+import { NewsPrompt, NewsPromptRef } from "./components/news-prompt";
 import { PageLayout } from "./components/page-layout";
 import { Article } from "./types/article";
 import { storeArticle } from "./utils/article-utils";
 
 export default function Home() {
   const router = useRouter();
+  const [currentPrompt, setCurrentPrompt] = useState("");
+  const newsPromptRef = useRef<NewsPromptRef>(null);
 
   const handleArticleGenerated = (article: Article) => {
     const slug = storeArticle(article);
+    setCurrentPrompt("");
     router.push(`/n/${slug}`);
   };
 
-  const handleTopicSelect = async (prompt: string) => {
+  const handleTopicSelect = (prompt: string) => {
     if (!prompt.trim()) return;
-    // Call the same API as NewsPrompt
-    try {
-      const response = await fetch("/api/generate-news", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: prompt.trim() }),
-      });
-      if (!response.ok) throw new Error("Failed to generate article");
-      const article = await response.json();
-      const slug = storeArticle(article);
-      router.push(`/n/${slug}`);
-    } catch (error) {
-      // Optionally handle error
-      console.error(error);
-    }
+    // Populate the prompt box and trigger generation
+    setCurrentPrompt(prompt.trim());
+    // Use setTimeout to ensure the prompt is set before triggering submission
+    setTimeout(() => {
+      newsPromptRef.current?.submitForm();
+    }, 0);
   };
 
   return (
     <PageLayout onTopicSelect={handleTopicSelect}>
       <div className="max-w-4xl mx-auto">
-        <NewsPrompt onArticleGenerated={handleArticleGenerated} />
+        <NewsPrompt
+          ref={newsPromptRef}
+          onArticleGenerated={handleArticleGenerated}
+          initialPrompt={currentPrompt}
+        />
       </div>
     </PageLayout>
   );

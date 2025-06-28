@@ -9,56 +9,58 @@ interface NewsArticleProps {
 }
 
 export function NewsArticle({ article }: NewsArticleProps) {
-  const renderMarkdownLinks = (text: string) => {
-    // Regex to match markdown links [text](url)
-    const markdownLinkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+  const renderContent = (
+    content: string,
+    applyFirstLetter: boolean = false
+  ) => {
+    const paragraphs = content.split("\n\n");
+    return paragraphs.map((paragraph, index) => {
+      // Parse markdown links: [text](url)
+      const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+      const parts = [];
+      let lastIndex = 0;
+      let match;
 
-    const parts = [];
-    let lastIndex = 0;
-    let match;
+      while ((match = linkRegex.exec(paragraph)) !== null) {
+        // Add text before the link
+        if (match.index > lastIndex) {
+          parts.push(paragraph.slice(lastIndex, match.index));
+        }
 
-    while ((match = markdownLinkRegex.exec(text)) !== null) {
-      // Add text before the link
-      if (match.index > lastIndex) {
-        parts.push(text.slice(lastIndex, match.index));
+        // Add the link
+        parts.push(
+          <a
+            key={`link-${index}-${match.index}`}
+            href={match[2]}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-cyan-600 hover:underline"
+          >
+            {match[1]}
+          </a>
+        );
+
+        lastIndex = match.index + match[0].length;
       }
 
-      // Add the link
-      const linkText = match[1];
-      const linkUrl = match[2];
-      parts.push(
-        <a
-          key={match.index}
-          href={linkUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
-        >
-          {linkText}
-        </a>
+      // Add remaining text after the last link
+      if (lastIndex < paragraph.length) {
+        parts.push(paragraph.slice(lastIndex));
+      }
+
+      const baseClasses =
+        "article-content mb-6 text-newspaper-black dark:text-white";
+      const firstLetterClasses =
+        applyFirstLetter && index === 0
+          ? " first:first-letter:float-left first:first-letter:text-6xl first:first-letter:font-bold first:first-letter:mr-2 first:first-letter:mt-1 first:first-letter:leading-none"
+          : "";
+
+      return (
+        <p key={index} className={baseClasses + firstLetterClasses}>
+          {parts.length > 0 ? parts : paragraph}
+        </p>
       );
-
-      lastIndex = match.index + match[0].length;
-    }
-
-    // Add remaining text after the last link
-    if (lastIndex < text.length) {
-      parts.push(text.slice(lastIndex));
-    }
-
-    return parts.length > 0 ? parts : text;
-  };
-
-  const renderContent = (content: string) => {
-    const paragraphs = content.split("\n\n");
-    return paragraphs.map((paragraph, index) => (
-      <p
-        key={index}
-        className="article-content mb-6 text-newspaper-black dark:text-white first:first-letter:float-left first:first-letter:text-6xl first:first-letter:font-bold first:first-letter:mr-2 first:first-letter:mt-1 first:first-letter:leading-none"
-      >
-        {renderMarkdownLinks(paragraph)}
-      </p>
-    ));
+    });
   };
 
   return (
@@ -102,7 +104,7 @@ export function NewsArticle({ article }: NewsArticleProps) {
       {/* Article Body */}
       <div className="prose prose-lg max-w-none">
         <div className="text-lg leading-newspaper text-newspaper-black dark:text-white font-serif">
-          {renderContent(article.content)}
+          {renderContent(article.content, true)}
         </div>
       </div>
 
@@ -128,7 +130,7 @@ export function NewsArticle({ article }: NewsArticleProps) {
       {article.additionalContent && (
         <div className="prose prose-lg max-w-none">
           <div className="text-lg leading-newspaper text-newspaper-black dark:text-white font-serif">
-            {renderContent(article.additionalContent)}
+            {renderContent(article.additionalContent, false)}
           </div>
         </div>
       )}

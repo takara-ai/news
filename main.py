@@ -19,7 +19,8 @@ def get_news():
         article = create_article(research)
         # Structure articles
         structured_article=generate_news_schema(content=article)
-        return jsonify({"results": structured_artcile}), 200
+        return jsonify({"results": structured_article}), 200
+    
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

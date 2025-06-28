@@ -32,7 +32,7 @@ We will continue to monitor this developing story and provide updates as new inf
     };
 
     // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    // await new Promise((resolve) => setTimeout(resolve, 2000));
 
     return NextResponse.json(mockArticle);
   } catch (error) {

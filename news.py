@@ -5,18 +5,27 @@ from agent.tools.web import web_search_tool, parse_webpage_tool
 from agent.tools.rss import get_rss_feeds, read_rss_tool
 
 # Get a load of content for writing editorials
-def curate_content(query: str, loop_limit: int = 5, model: str = "gpt-4.1-mini") -> str:
-    agent = CodeAgent("openai", "content_curator-3", loop_limit=loop_limit, tools=[web_search_tool, parse_webpage_tool, get_rss_feeds, read_rss_tool], model=model)
+def curate_content(query: str, loop_limit: int = 5, model: str = "gpt-4.1-mini", custom_agent = None) -> str:
+    if custom_agent:
+        agent = custom_agent
+    else:
+        agent = CodeAgent("openai", "content_curator-3", loop_limit=loop_limit, tools=[web_search_tool, parse_webpage_tool, get_rss_feeds, read_rss_tool], model=model)
     return agent(query)
 
 # Create an article from research
-def create_article(research: str, loop_limit: int = 5, model: str = "gpt-4.1-mini") -> str:
-    agent = CodeAgent("openai", "editorial_writer-2", loop_limit=loop_limit, tools=[web_search_tool, parse_webpage_tool, get_rss_feeds, read_rss_tool], model=model)   
+def create_article(research: str, loop_limit: int = 5, model: str = "gpt-4.1-mini", custom_agent = None) -> str:
+    if custom_agent:
+        agent = custom_agent
+    else:
+        agent = CodeAgent("openai", "editorial_writer-2", loop_limit=loop_limit, tools=[web_search_tool, parse_webpage_tool, get_rss_feeds, read_rss_tool], model=model)   
     return agent(research)
 
 # Create a list of articles from research
-def create_articles(research: str, loop_limit: int = 5, model: str = "gpt-4.1-mini") -> list[str]:
-    agent = CodeAgent("openai", "multi-editorial_writer", loop_limit=loop_limit, tools=[web_search_tool, parse_webpage_tool, get_rss_feeds, read_rss_tool], model=model)
+def create_articles(research: str, loop_limit: int = 5, model: str = "gpt-4.1-mini", custom_agent = None) -> list[str]:
+    if custom_agent:
+        agent = custom_agent
+    else:
+        agent = CodeAgent("openai", "multi-editorial_writer", loop_limit=loop_limit, tools=[web_search_tool, parse_webpage_tool, get_rss_feeds, read_rss_tool], model=model)
     # Transform LLM response into a list of articles# Extract articles from the response
     response = agent(research)
     articles = []

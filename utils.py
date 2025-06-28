@@ -28,6 +28,7 @@ def generate_news_schema(content:str):
         ],
         response_format=NewsArticle,
     )
+    
 
     math_reasoning = completion.choices[0].message
     answer=math_reasoning.to_json()

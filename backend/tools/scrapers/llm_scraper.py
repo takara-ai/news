@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from .prompts import EXTRACT_PROMPT
+from .prompts import EXTRACT_PROMPT, SUMMARY_PROMPT
 import re
 from openai import OpenAI
 
@@ -39,6 +39,15 @@ def extract(text: str) -> str:
     content = re.sub(r"<think>.*?</think>", "", content, flags=re.DOTALL) # CoT is stupid like this
     return content.strip()
 
+def summarize(text: str) -> str:
+    messages = [
+        {"role": "system", "content": SUMMARY_PROMPT},
+        {"role": "user", "content": text},
+    ]
+    result = completion(messages)
+    content = result.content
+    content = re.sub(r"<think>.*?</think>", "", content, flags=re.DOTALL) # CoT is stupid like this
+    return content.strip()
 
 # for later i guess if we have time
 

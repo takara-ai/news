@@ -57,9 +57,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className="dark:bg-newspaper-gray-900"
+    >
       <body
-        className={`${playfairDisplay.variable} ${crimsonText.variable} ${inter.variable} antialiased`}
+        className={`${playfairDisplay.variable} ${crimsonText.variable} ${inter.variable} antialiased dark:bg-newspaper-gray-900`}
       >
         <ThemeRoot>{children}</ThemeRoot>
       </body>

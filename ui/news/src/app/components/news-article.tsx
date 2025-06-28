@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { Article } from "../types/article";
+import { getShortDate } from "../utils/date-utils";
 
 interface NewsArticleProps {
   article: Article;
@@ -20,14 +21,6 @@ export function NewsArticle({ article }: NewsArticleProps) {
     ));
   };
 
-  const getCurrentDate = () => {
-    return new Date().toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
-
   return (
     <article className="max-w-4xl mx-auto">
       {/* Article Header */}
@@ -42,7 +35,7 @@ export function NewsArticle({ article }: NewsArticleProps) {
         {/* Byline */}
         <div className="flex flex-wrap items-center gap-4 text-sm text-newspaper-gray-600 dark:text-newspaper-gray-400">
           <div className="byline">By The New World Times Staff</div>
-          <div className="byline">{getCurrentDate()}</div>
+          <div className="byline">{getShortDate()}</div>
           <div className="byline">5 MIN READ</div>
         </div>
       </header>

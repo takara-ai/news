@@ -50,7 +50,7 @@ export function NewsPrompt({ onArticleGenerated }: NewsPromptProps) {
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             placeholder="What story would you like to read today?"
-            className="w-full p-4 pr-16 border-2 border-newspaper-gray-300 dark:border-newspaper-gray-600 rounded-lg focus:ring-2 focus:ring-newspaper-black dark:focus:ring-white focus:border-transparent bg-white dark:bg-newspaper-gray-800 text-newspaper-black dark:text-white placeholder-newspaper-gray-500 dark:placeholder-newspaper-gray-400 font-sans text-lg"
+            className="w-full p-4 pr-16 border-2 border-newspaper-gray-300 dark:border-newspaper-gray-600 rounded-lg focus:ring-2 focus:ring-newspaper-black dark:focus:ring-white focus:border-transparent dark:bg-newspaper-gray-800 text-newspaper-black dark:text-white placeholder-newspaper-gray-500 dark:placeholder-newspaper-gray-400 font-sans text-lg"
             disabled={isLoading}
           />
           <button

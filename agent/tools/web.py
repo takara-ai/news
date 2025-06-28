@@ -1,5 +1,4 @@
 import requests
-import reader
 from duckduckgo_search import DDGS
 import markdownify
 from readability import Document

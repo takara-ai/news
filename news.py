@@ -35,7 +35,7 @@ def create_articles(research: str, model: str = "gpt-4.1-mini") -> list[str]:
 """
 Testing
 """
-if __name__ === "__name__":
+if __name__ == "__main__":
     # Get research
     question = "Trending, breaking, hyped tech and AI news"
     research = curate_content(question)

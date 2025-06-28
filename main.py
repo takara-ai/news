@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from agent.core.code_agent import CodeAgent
 from agent.core.openai import OpenAIAgent
 from agent.tools.web import web_search_tool, parse_webpage_tool
-
+from utils import generate_news_schema
 app = Flask(__name__)
 
 @app.route('/get-news', methods=['POST'])
@@ -20,7 +20,8 @@ def get_news():
         raws_articles = content_creation_agent(prompt, debug=True, eval_check=True)
         #print(f"\n\nANSWER: {answer}\n\n")
         pause = input("\nContinue?:\n")
-        return jsonify({"results": raws_articles}), 200
+        structured_artcile=generate_news_schema(content=raws_articles)
+        return jsonify({"results": structured_artcile}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

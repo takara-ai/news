@@ -1,9 +1,14 @@
 from pydantic import BaseModel, Field
 from openai import OpenAI
+from dotenv import load_dotenv
+import os
 
-client = OpenAI()
+load_dotenv()
 
-
+client = OpenAI(
+    base_url=os.environ.get("OPENAI_URL"),
+    api_key=os.environ.get("OPENAI_API_KEY")
+)
 
 class NewsArticle(BaseModel):
     title: str = Field(
@@ -15,7 +20,6 @@ class NewsArticle(BaseModel):
 
 
 def generate_news_schema(content:str):
-
     NEWS_SCHEMA_SYS="""Give an Unstructured News parsed for various sources your role is to structure the news article in proper format:" 
     Here is the unstrcutured content {content}"""
 

@@ -7,7 +7,7 @@ from openai import OpenAI
 load_dotenv()
 
 base_url = os.environ.get("OPENAI_URL")
-api_key = os.environ.get("OPENAI_TOKEN")
+api_key = os.environ.get("OPENAI_API_KEY")
 extraction_model = os.environ.get("OPENAI_MODEL")
 
 print(f"INFO: Using model {extraction_model}")

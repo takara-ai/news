@@ -44,7 +44,7 @@ def load_prompt(agent_name: str, tools: list[Tool] = [], loop_limit: int = 0):
             # target_prompt += "The assistant does not have access to any tools on this occasion. The assistant can still use Python in <code> blocks."
             pass
         if loop_limit:
-            target_prompt += f"\n---\n\n## CONDITION \n\n The assistant must provide an <answer>...</answer> with a final answer before the {loop_limit}th response. The assistant will fail if an answer is not provided by the {loop_limit}th response. The assistant will provide an answer on, or before, their {loop_limit}th response."
+            target_prompt += f"\n---\n\n## CONDITION \n\n The assistant must provide an <answer>...</answer> with a final answer before the {loop_limit - 1}th response. The assistant will fail if an answer is not provided by the {loop_limit}th response. The assistant will provide an answer on, or before, their {loop_limit}th response."
         return target_prompt
     except KeyError:
         raise KeyError(f"Prompt not found for agent: {agent_name}")

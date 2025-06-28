@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from news import curate_content, create_article, create_articles
+from news import fast_article
 from utils import generate_news_schema
 from json2img import AsyncNewsPresentationMaker
 app = Flask(__name__)
@@ -46,7 +46,6 @@ def get_json2img():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
 @app.route('/get-news', methods=['POST'])
 def get_news():
     data = request.get_json()
@@ -57,16 +56,15 @@ def get_news():
     prompt = data['prompt']
 
     try:
-        # Research
-        research = curate_content(prompt)
-        # Create articles
-        article = create_article(research)
-        # Structure articles
-        structured_article=generate_news_schema(content=article)
-        return jsonify({"results": structured_article}), 200
-        return jsonify({"results": structured_article}), 200
+        # Get article
+        article = fast_article(prompt)
+        return jsonify({"results": article}) 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -49,7 +49,10 @@ function SafeImage({
 }
 
 export function NewsArticle({ article }: NewsArticleProps) {
-  const renderContent = (content: string) => {
+  const renderContent = (
+    content: string,
+    applyFirstLetter: boolean = false
+  ) => {
     const paragraphs = content.split("\n\n");
     return paragraphs.map((paragraph, index) => {
       // Parse markdown links: [text](url)
@@ -85,11 +88,15 @@ export function NewsArticle({ article }: NewsArticleProps) {
         parts.push(paragraph.slice(lastIndex));
       }
 
+      const baseClasses =
+        "article-content mb-6 text-newspaper-black dark:text-white";
+      const firstLetterClasses =
+        applyFirstLetter && index === 0
+          ? " first:first-letter:float-left first:first-letter:text-6xl first:first-letter:font-bold first:first-letter:mr-2 first:first-letter:mt-1 first:first-letter:leading-none"
+          : "";
+
       return (
-        <p
-          key={index}
-          className="article-content mb-6 text-newspaper-black dark:text-white first:first-letter:float-left first:first-letter:text-6xl first:first-letter:font-bold first:first-letter:mr-2 first:first-letter:mt-1 first:first-letter:leading-none"
-        >
+        <p key={index} className={baseClasses + firstLetterClasses}>
           {parts.length > 0 ? parts : paragraph}
         </p>
       );
@@ -133,7 +140,7 @@ export function NewsArticle({ article }: NewsArticleProps) {
       {/* Article Body */}
       <div className="prose prose-lg max-w-none">
         <div className="text-lg leading-newspaper text-newspaper-black dark:text-white font-serif">
-          {renderContent(article.content)}
+          {renderContent(article.content, true)}
         </div>
       </div>
 
@@ -158,7 +165,7 @@ export function NewsArticle({ article }: NewsArticleProps) {
       {article.additionalContent && (
         <div className="prose prose-lg max-w-none">
           <div className="text-lg leading-newspaper text-newspaper-black dark:text-white font-serif">
-            {renderContent(article.additionalContent)}
+            {renderContent(article.additionalContent, false)}
           </div>
         </div>
       )}

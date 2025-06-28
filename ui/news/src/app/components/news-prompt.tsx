@@ -56,7 +56,7 @@ export function NewsPrompt({ onArticleGenerated }: NewsPromptProps) {
           <button
             type="submit"
             disabled={!prompt.trim() || isLoading}
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 bg-newspaper-black hover:bg-newspaper-gray-800 disabled:bg-newspaper-gray-400 disabled:cursor-not-allowed rounded-md text-white transition-colors"
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 bg-newspaper-black hover:bg-newspaper-gray-800 disabled:bg-newspaper-gray-400 disabled:cursor-not-allowed rounded-md text-white transition-colors cursor-pointer"
           >
             {isLoading ? (
               <Loader2 className="h-5 w-5 animate-spin" />

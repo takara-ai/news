@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Crimson_Text, Inter } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "./components/theme-provider";
+import ThemeRoot from "./components/theme-root";
 
 const playfairDisplay = Playfair_Display({
   variable: "--font-playfair",
@@ -26,6 +26,29 @@ export const metadata: Metadata = {
   title: "The New World Times",
   description:
     "Your customizable news source for breaking stories and in-depth coverage",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      {
+        url: "/web-app-manifest-192x192.png",
+        sizes: "192x192",
+        type: "image/png",
+      },
+      {
+        url: "/web-app-manifest-512x512.png",
+        sizes: "512x512",
+        type: "image/png",
+      },
+    ],
+    apple: [
+      {
+        url: "/web-app-manifest-192x192.png",
+        sizes: "192x192",
+        type: "image/png",
+      },
+    ],
+  },
+  manifest: "/web-app-manifest-192x192.png",
 };
 
 export default function RootLayout({
@@ -38,14 +61,7 @@ export default function RootLayout({
       <body
         className={`${playfairDisplay.variable} ${crimsonText.variable} ${inter.variable} antialiased`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+        <ThemeRoot>{children}</ThemeRoot>
       </body>
     </html>
   );

@@ -13,7 +13,7 @@ export function NewsArticle({ article }: NewsArticleProps) {
     return paragraphs.map((paragraph, index) => (
       <p
         key={index}
-        className="article-content mb-6 first:first-letter:float-left first:first-letter:text-6xl first:first-letter:font-bold first:first-letter:mr-2 first:first-letter:mt-1 first:first-letter:leading-none"
+        className="article-content mb-6 text-newspaper-black dark:text-white first:first-letter:float-left first:first-letter:text-6xl first:first-letter:font-bold first:first-letter:mr-2 first:first-letter:mt-1 first:first-letter:leading-none"
       >
         {paragraph}
       </p>
@@ -32,7 +32,9 @@ export function NewsArticle({ article }: NewsArticleProps) {
     <article className="max-w-4xl mx-auto">
       {/* Article Header */}
       <header className="mb-8 pb-6 border-b border-newspaper-gray-200 dark:border-newspaper-gray-700">
-        <div className="section-tag mb-4">BREAKING NEWS</div>
+        <div className="section-tag mb-4 text-newspaper-gray-600 dark:text-newspaper-gray-400">
+          BREAKING NEWS
+        </div>
         <h1 className="text-4xl md:text-6xl font-display font-bold text-newspaper-black dark:text-white leading-tight mb-6">
           {article.title}
         </h1>

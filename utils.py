@@ -2,6 +2,8 @@ from pydantic import BaseModel, Field
 from openai import OpenAI
 from dotenv import load_dotenv
 import os
+from google import genai
+from google.genai import types
 
 load_dotenv()
 
@@ -46,28 +48,45 @@ NEWS_WEB_SEARCH_SYS="""I have created a news website where user will provide som
 and I will provide them with the detail news artcile to read on realted to that topic by doing the websearch and find all the recent things happens related to the give topic. Your role here is to 
 help me in preparing the news artciles by doing the webserch and collect information from the web. Once you collect the information draft it into an artcile format which I will directly display on my UI. 
 """
-def oai_websearch(query: str):
-    completion = client.chat.completions.create(
-        model="gpt-4o-search-preview",
-        messages=[
-                {"role": "system", "content": NEWS_WEB_SEARCH_SYS},
-                {"role": "user", "content": query}
+def oai_websearch(query: str, provider='oai'):
+    if provider=='oai':
+        completion = client.chat.completions.create(
+            model="gpt-4o-search-preview",
+            messages=[
+                    {"role": "system", "content": NEWS_WEB_SEARCH_SYS},
+                    {"role": "user", "content": query}
 
-            ],
-    )
-    return completion.choices[0].message.content
+                ],
+        )
+        return completion.choices[0].message.content
 
 
-def oaideep_research(query: str):
-    response = client.responses.create(
-    model="o3-deep-research",
-    input=NEWS_WEB_SEARCH_SYS+'Here the user query:'+query,
-    tools=[
-        {"type": "web_search_preview"},
-    ]
-    )
+  
+    if provider=='google':
+    # Configure the client
+        client = genai.Client()
 
-    print(response.output_text)
+        # Define the grounding tool
+        grounding_tool = types.Tool(
+            google_search=types.GoogleSearch()
+        )
+
+        # Configure generation settings
+        config = types.GenerateContentConfig(
+            tools=[grounding_tool]
+        )
+
+        # Make the request
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=NEWS_WEB_SEARCH_SYS+'Here the user query:'+query,
+            config=config,
+        )
+        return response.text
+
+
+        # Print the grounded response
+        #print(response.text)
 
 
 

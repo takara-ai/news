@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     if (!flaskResponse.ok) {
       const errorData = await flaskResponse.json();
       return NextResponse.json(
-        { error: errorData.error || "Failed to fetch from Flask API" },
+        { error: errorData.error || "An error occurred while fetching from API." },
         { status: flaskResponse.status }
       );
     }
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("Error generating news article:", error);
     return NextResponse.json(
-      { error: "Failed to generate article" },
+      { error: "An error occurred while generating the news article." },
       { status: 500 }
     );
   }
